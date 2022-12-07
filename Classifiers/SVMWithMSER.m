@@ -28,4 +28,4 @@ testingAccuracy = mean(diag(confMatrix));
 
 testingTime = toc;
 
-save Detector\SVMMserDetectorModel categoryClassifier
+save Models\SVMMserDetectorModel categoryClassifier

@@ -1,5 +1,5 @@
 % Load all positive and negative examples
-images=imageDatastore('Resources\images\','IncludeSubfolders',true,'LabelSource','foldernames');
+images=imageDatastore('Resources/images','IncludeSubfolders',true,'LabelSource','foldernames');
 
 % Define the feature extraction method to be used
 extractorFunction = @getImagePixelArray;
@@ -28,4 +28,4 @@ testingAccuracy = mean(diag(confMatrix));
 
 testingTime = toc;
 
-save Detector\SVMFullImageDetectorModel categoryClassifier
+save Models\SVMFullImageDetectorModel categoryClassifier

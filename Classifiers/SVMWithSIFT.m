@@ -31,4 +31,4 @@ testingTime = toc;
 
 % As this is the chosen method for the detector, the model is saved to be
 % used by the detector
-save Detector\SVMSIFTDetectorModel categoryClassifier
+save Models\SVMSIFTDetectorModel categoryClassifier

@@ -1,5 +1,5 @@
 % Load all positive and negative examples
-images=imageDatastore('Resources/images\','IncludeSubfolders',true,'LabelSource','foldernames');
+images=imageDatastore('Resources/images','IncludeSubfolders',true,'LabelSource','foldernames');
 
 % Define the feature extraction method to be used
 extractorFunction = @extractHOGFeatures;
@@ -28,4 +28,4 @@ testingAccuracy = mean(diag(confMatrix));
 
 testingTime = toc;
 
-save Detector\SVMHOGDetectorModel categoryClassifier
+save Models\SVMHOGDetectorModel categoryClassifier
