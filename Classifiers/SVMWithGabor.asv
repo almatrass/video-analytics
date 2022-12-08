@@ -42,8 +42,6 @@ bag = bagOfFeatures(images.subset(train),"CustomExtractor", extractorFunction);
 % categoryClassifier = trainImageCategoryClassifier(trainingSet, bag);
 categoryClassifier = trainImageCategoryClassifier(images.subset(train), bag, "LearnerOptions", SVMOptions);
 
-trainingTime = toc;
-
 % Testing
 tic;
 
@@ -55,17 +53,7 @@ testingAccuracy = mean(diag(confMatrix));
 
 %ROC Curve
 
-pred = zeros(124, 1);
-for y = 1:124
-    [labelIndex, score] = categoryClassifier.predict(frameCells{i});
-    label=categoryClassifier.Labels(labelIndex);
-    if label == "face"
-        pred(i) = 1;
-    end
 
-end
-% [Xlog,Ylog,Tlog,AUClog] = perfcurve(resp,score_log,'true');
-% plot(Xlog,Ylog)
 
 testingTime = toc;
 
