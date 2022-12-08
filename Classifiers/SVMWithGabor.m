@@ -3,6 +3,8 @@ images=imageDatastore('Resources/images','IncludeSubfolders',true,'LabelSource',
 
 % Define the feature extraction method to be used
 extractorFunction = @extractGaborFeatures;
+
+% Format data for cross validation
 frameCells=readall(images);
 frameArray = zeros(486, length(frameCells));
 for i = 1:length(frameCells)
@@ -12,6 +14,7 @@ end
 
 labels = images.Labels;
 
+% K fold cross validation, K=3
 tbl = countEachLabel(images);
 minimumSetCount = min(tbl{:,2});
 ims = splitEachLabel(images,minimumSetCount, 'randomize');
