@@ -4,25 +4,44 @@ images=imageDatastore('Resources/images','IncludeSubfolders',true,'LabelSource',
 % Define the feature extraction method to be used
 extractorFunction = @extractSIFTFeatures;
 
-% Split the dataset randomly into training and testing sets, with 60% used
-% for training and 40% for testing
-[trainingSet, testingSet] = splitEachLabel(images, 0.6, 'randomize');
+frameCells=readall(images);
+frameArray = zeros(486, length(frameCells));
+for i = 1:length(frameCells)
+
+frameArray(:, i) = reshape(frameCells{i}, 486, 1);
+end
+
+labels = images.Labels;
+
+tbl = countEachLabel(images);
+minimumSetCount = min(tbl{:,2});
+ims = splitEachLabel(images,minimumSetCount, 'randomize');
+indices = crossvalind('Kfold', labels , 3);
+cp = classperf(string(labels));
+
+for i = 1:3
+    test = (indices == i); 
+    train = ~test;
+    class = classify(frameArray(test, :),frameArray(train, :), labels(train,:), 'diaglinear');
+    classperf(cp,string(class),test);
+end
+cp.ErrorRate;
 
 % Define options to be used by SVM classifier (if any)
 SVMOptions = templateSVM("KernelFunction", "linear");
 
 % Training
 tic;
-bag = bagOfFeatures(trainingSet,"CustomExtractor", extractorFunction);
+bag = bagOfFeatures(images.subset(train),"CustomExtractor", extractorFunction);
 % categoryClassifier = trainImageCategoryClassifier(trainingSet, bag);
-categoryClassifier = trainImageCategoryClassifier(trainingSet, bag, "LearnerOptions", SVMOptions);
+categoryClassifier = trainImageCategoryClassifier(images.subset(train), bag, "LearnerOptions", SVMOptions);
 trainingTime = toc;
 
 % Testing
 tic;
 
 % Run classifier on the testing set
-confMatrix = evaluate(categoryClassifier, testingSet);
+confMatrix = evaluate(categoryClassifier, images.subset(test));
 
 % Determine accuracy of classifier on testing set
 testingAccuracy = mean(diag(confMatrix));
